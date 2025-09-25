@@ -140,3 +140,11 @@ def markdown_to_html_node(markdown):
         if block_type == block_type_olist:
             children.append(olist_to_html_node(block))
     return ParentNode("div", children)
+
+
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    for line in lines:
+        if line.startswith("# "):
+            return line[2:]
+    raise Exception("No h1 header found")

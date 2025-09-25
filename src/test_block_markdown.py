@@ -1,6 +1,7 @@
 import unittest
 from block_markdown import (
     markdown_to_html_node,
+    extract_title
 )
 
 
@@ -88,6 +89,15 @@ the **same** even with inline stuff
             html,
             "<div><ol><li>This is an</li><li>ordered list</li></ol></div>",
         )
+
+    def test_extract_title(self):
+        md = """
+# This is a title
+
+This is a paragraph
+"""
+        title = extract_title(md)
+        self.assertEqual(title, "This is a title")
 
 
 if __name__ == "__main__":

@@ -1,25 +1,20 @@
-from textnode import TextNode, TextType
+import os
+import shutil
 
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    new_nodes = []
-    for old_node in old_nodes:
-        if old_node.text_type != TextType.TEXT:
-            new_nodes.append(old_node)
-            continue
-        
-        split_nodes = []
-        parts = old_node.text.split(delimiter)
-        
-        if len(parts) % 2 == 0:
-            raise ValueError("Invalid markdown syntax: missing closing delimiter")
-            
-        for i, part in enumerate(parts):
-            if part == "":
-                continue
-            if i % 2 == 0:
-                split_nodes.append(TextNode(part, TextType.TEXT))
-            else:
-                split_nodes.append(TextNode(part, text_type))
-        new_nodes.extend(split_nodes)
-        
-    return new_nodes
+from copystatic import copy_files
+from page_generator import generate_page
+
+
+def main():
+    print("Deleting public directory...")
+    if os.path.exists("public"):
+        shutil.rmtree("public")
+
+    print("Copying static files to public directory...")
+    copy_files("static", "public")
+
+    print("Generating page...")
+    generate_page("content/index.md", "template.html", "public/index.html")
+
+
+main()
